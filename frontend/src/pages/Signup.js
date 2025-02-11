@@ -12,7 +12,7 @@ const Signup = () => {
     setError(null);
 
     try {
-      const response = await fetch('https://your-api-endpoint.com/api/user/signup', {
+      const response = await fetch('api/user/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
