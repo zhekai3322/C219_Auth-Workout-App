@@ -16,15 +16,20 @@ const Signup = () => {
     <form className="signup" onSubmit={handleSubmit}>
       <h3>Sign Up</h3>
       
-      <label>Email address:</label>
+      <label htmlFor="email">Email address:</label>
       <input 
+        id="email"
         type="email" 
+        placeholder="example@example.com"
         onChange={(e) => setEmail(e.target.value)} 
         value={email} 
       />
-      <label>Password:</label>
+      
+      <label htmlFor="password">Password:</label>
       <input 
+        id="password"
         type="password" 
+        placeholder="•••••••••"
         onChange={(e) => setPassword(e.target.value)} 
         value={password} 
       />
