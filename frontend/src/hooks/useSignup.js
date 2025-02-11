@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useAuthContext } from './useAuthContext'
 
-
 export const useSignup = () => {
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -21,24 +20,32 @@ export const useSignup = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
-        timeout: 10000
+        timeout: 10000, // 10s timeout
       })
 
-      if (!response.ok) {
-        const json = await response.json()
-        setError(json.error)
+      // Log the raw response text to debug
+      const text = await response.text();  // Get raw response text
+      console.log("Response Text:", text);  // Log to console to inspect
+
+      if (text) {
+        // If the response is not empty, try parsing it as JSON
+        const json = JSON.parse(text);  // Safely parse the text response
+
+        if (!response.ok) {
+          setError(json.error || 'Something went wrong');
+        } else {
+          localStorage.setItem('user', JSON.stringify(json));
+          dispatch({ type: 'LOGIN', payload: json });
+        }
       } else {
-        const json = await response.json()
-        localStorage.setItem('user', JSON.stringify(json))
-        dispatch({ type: 'LOGIN', payload: json })
+        setError('No response from the server');
       }
-    } 
-    // catch (error) {
-    //   console.error(error)
-    //   setError('Network error. Please try again.')
-    // } 
-    finally {
-      setIsLoading(false)
+
+    } catch (error) {
+      console.error(error);
+      setError('Network error. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   }
 
